@@ -1,0 +1,176 @@
+R1#show run
+Building configuration...
+
+Current configuration : 3806 bytes
+!
+version 17.15
+service timestamps debug datetime msec
+service timestamps log datetime msec
+!
+hostname R1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!         
+!
+!
+!
+ip cef
+login on-success log
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+crypto pki trustpoint TP-self-signed-131184674
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-131184674
+ revocation-check none
+ rsakeypair TP-self-signed-131184674
+ hash sha512
+!
+!
+crypto pki certificate chain TP-self-signed-131184674
+ certificate self-signed 01
+  3082032E 30820216 A0030201 02020101 300D0609 2A864886 F70D0101 0D050030 
+  30312E30 2C060355 04030C25 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 31333131 38343637 34301E17 0D323531 30303631 31353035 
+  325A170D 33353130 30363131 35303532 5A303031 2E302C06 03550403 0C25494F 
+  532D5365 6C662D53 69676E65 642D4365 72746966 69636174 652D3133 31313834 
+  36373430 82012230 0D06092A 864886F7 0D010101 05000382 010F0030 82010A02 
+  82010100 F3EDD0AB 718A55B8 5AAD3AB2 CB9202B4 89358B39 5AFF6AD1 2ABD4008 
+  27223D3C 8CA168C4 2113E047 625951EA D9653CE1 47A0997A 52B1A3EA 65D0F87D 
+  5C492990 7FE72AC8 75214716 FB2CBE94 6585BA62 8DA2D625 971C2E29 65F81759 
+  2ADC4F6B 82ABAFAC 58E0133D 350917BB 7232E688 92D72918 C61A518D 7D9E60E0 
+  31F7A93C 57BEA4B1 4961EDD1 BBDA8521 C9F73682 8801185F 80047650 55A1445F 
+  7AFAC157 7B966984 00A9679E B91BFF88 B130B1F8 EC0FB214 44DDB91D 901CE14B 
+  8247675F 1D90A907 35F490EF 41D85095 60499746 9CDF002C C281C912 10499CA4 
+  D93E61A8 7B71CCA1 B2AB1B30 14716523 FA2B59F2 8B275763 2E4545DB 8CBB01EE 
+  A609F253 02030100 01A35330 51301D06 03551D0E 04160414 CCC528DF 792204E4 
+  1CCAB8A0 190FF774 850B2401 301F0603 551D2304 18301680 14CCC528 DF792204 
+  E41CCAB8 A0190FF7 74850B24 01300F06 03551D13 0101FF04 05300301 01FF300D 
+  06092A86 4886F70D 01010D05 00038201 0100EAD2 05DCD236 C2BD3108 D28837E1 
+  5CFC5427 6DC21687 E1BC5DFA F61D0DFF 53820233 453EE112 9C5937EE C9F1DACC 
+  A35599A8 9B1C0ECC 4A81B91E 40C9198F DE33D938 4634AFEA 0195DA15 5BC9E3F4 
+  303A7B75 0B5C8DB6 C872C67E 558E0C21 FBE125E1 92B0D07A 62B6A9CA 16E071F4 
+  4E91E0E3 377D34B7 27C0F1E1 0F9FB6C0 77FC6747 79EC61ED F5FA9589 35B87B72 
+  BC417F3E 77C2C85C 91B45530 2285DD28 FE43FE72 9497435D DE353BC4 143F3DD8 
+  C286C36E 30DBD6AB 0A71FCD0 A63BFA40 D4CA4419 44C8446E 133FF0B7 82CC5BA6 
+  2416BBE5 8DC095E7 2D48F2C2 8269999C 6B14B794 6004E776 23AC8730 7D3E0460 
+  509B3A6E 50AD257D 54B2F294 E8A1D430 EC13
+        quit
+!
+!
+memory free low-watermark processor 80093
+!
+!
+spanning-tree mode rapid-pvst
+!
+!
+!
+!
+!
+!
+!
+! 
+!         
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Ethernet0/0
+ ip address 10.0.0.2 255.255.255.252
+ ipv6 address 2001:ABCD:CAFE:1::2/64
+ ospfv3 123 ipv6 area 0
+ ospfv3 123 ipv4 area 0
+!
+interface Ethernet0/1
+ ip address 10.0.0.5 255.255.255.252
+ ipv6 address 2001:ABCD:CAFE:2::1/64
+ ospfv3 123 ipv6 area 1
+ ospfv3 123 ipv4 area 1
+!
+interface Ethernet0/2
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+router ospfv3 123
+ !
+ address-family ipv4 unicast
+  router-id 1.1.1.2
+  area 0 range 192.168.1.0 255.255.255.128
+  area 1 filter-list prefix BLOCK_LOOPBACK2 in
+ exit-address-family
+ !
+ address-family ipv6 unicast
+  router-id 1.1.1.2
+  area 1 filter-list prefix BLOCK_V6 in
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+ip http server
+ip http secure-server
+ip ssh bulk-mode 131072
+!
+ip prefix-list BLOCK_LOOPBACK2 seq 5 deny 192.168.100.0/24 le 32
+ip prefix-list BLOCK_LOOPBACK2 seq 10 permit 0.0.0.0/0 le 32
+no logging btrace
+!
+ipv6 prefix-list BLOCK_V6 seq 5 deny 2001:ABCD:CAFE:4::/64 le 128
+ipv6 prefix-list BLOCK_V6 seq 10 permit ::/0 le 128
+!
+!
+!
+control-plane
+!
+!
+!
+line con 0
+ password cisco
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password cisco
+ login
+ transport input ssh
+!
+!
+!
+!
+end

@@ -1,0 +1,203 @@
+D1#show run
+Building configuration...
+
+Current configuration : 4710 bytes
+!
+! Last configuration change at 15:20:57 UTC Wed Oct 8 2025
+!
+version 17.15
+service timestamps debug datetime msec
+service timestamps log datetime msec
+!
+hostname D1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+ --More-- 
+*Oct  8 15:20:58.282: %LINEPROTO-5-UPDOWN: Line protocol on Interface Ethernet0/1, changed state to up
+*Oct  8 15:20:58.284: %LINEPROTO-5-UPDOWN: Line protocol on Interface Ethernet0/2, changed state to up
+!         
+!
+!
+!
+!
+!
+ip audit notify log
+ip audit po max-events 100
+ip cef
+login on-success log
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+crypto pki trustpoint TP-self-signed-131184666
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-131184666
+ revocation-check none
+ rsakeypair TP-self-signed-131184666
+ hash sha512
+!
+!
+crypto pki certificate chain TP-self-signed-131184666
+ certificate self-signed 01
+  3082032E 30820216 A0030201 02020101 300D0609 2A864886 F70D0101 0D050030 
+  30312E30 2C060355 04030C25 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 31333131 38343636 36301E17 0D323531 30303630 38333735 
+  345A170D 33353130 30363038 33373534 5A303031 2E302C06 03550403 0C25494F 
+  532D5365 6C662D53 69676E65 642D4365 72746966 69636174 652D3133 31313834 
+  36363630 82012230 0D06092A 864886F7 0D010101 05000382 010F0030 82010A02 
+  82010100 8F56AF74 EDE4738E 7FA54ECB AB3B95CC 3735A3EF 1188B62A 30455FFA 
+  5D691994 3F763FF4 11B989EC 4A52D136 5D917D7A 48DDAF90 960ADC2D A8CDCA43 
+  8D57AAE5 9A4253C5 98C6E1BF E533FA20 FDF9C9DA DFE49083 0B861A65 F843A128 
+  79E88F9A A710CE41 24EA371F 7CF4B193 993D2077 923D3167 B22B4DAE 98296C23 
+  FC27A6DF FF471643 95823843 87E02986 AF0B1DF7 88338AA8 0ED8F306 6A36F06C 
+  B069200C 887E293E 7B8C46F5 C8CEEB72 97A685C8 E05F3D7D 00269059 701E9CA7 
+  02B035AE CC2E03F4 5DF55BF7 02EDC87D B6E0300B 4939D04B 8B6F75AD 56C92AC8 
+  6187F631 6990748D 5DF5CC8F B6F0F3E8 3972A6D7 3F089CCF 32795BB2 15176268 
+  7F4DF6BB 02030100 01A35330 51301D06 03551D0E 04160414 122C4BE5 77519670 
+  62D30EF5 E81ABE21 1FB042A4 301F0603 551D2304 18301680 14122C4B E5775196 
+  7062D30E F5E81ABE 211FB042 A4300F06 03551D13 0101FF04 05300301 01FF300D 
+  06092A86 4886F70D 01010D05 00038201 01003FF6 C253D7C1 710C23B9 122B6070 
+  0E9FFA06 6CC8CB70 EB25EE7D 8CE492A8 09CA6FF6 2A0F77A2 49E20EC9 96162322 
+  C98C4785 8B92E976 D526F9D9 898E0724 82E54060 C090D18E 38ED6A6B C157E560 
+  88B9BB70 1AC0A18B BEEA47E9 D23250F4 6B3F6748 414DBADC C439B812 BE8ECD75 
+  73706113 A738A0C1 03C87B67 886B12BF D2DE9105 EF56B5BF A30684E3 6F68A4A2 
+  98F56696 27CB8675 ACCE3683 829E3B86 1A7E9227 9AAF811F 3D6F0581 25739B33 
+  5BD3B146 1FA9E505 4DEAD1DB 496C6A92 076E3791 6B53C7C1 130E9AAD 6169F9E4 
+  BDA13F67 2C471A7A 1A391D1A C9011E31 13B551B0 649BA541 F0A29FD4 507244E3 
+  B00EF193 34B5123A 373078A4 47CC9E07 8A45
+        quit
+!
+!
+memory free low-watermark processor 79593
+!
+!
+spanning-tree mode mst
+spanning-tree extend system-id
+!
+spanning-tree mst configuration
+ name REGION1
+ revision 2
+ instance 1 vlan 1-10
+ instance 2 vlan 11-20
+ instance 3 vlan 21-30
+!
+spanning-tree mst 1,3 priority 4096
+!
+username cisco password 0 cisco
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+interface Loopback2
+ ip address 192.168.100.1 255.255.255.0
+ ipv6 address 2001:ABCD:CAFE:4::1/64
+ ospfv3 123 ipv6 area 0
+ ospfv3 123 ipv4 area 0
+!
+interface Port-channel1
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 5,10,15,25
+ switchport mode trunk
+!         
+interface Ethernet0/0
+ no switchport
+ ip address 10.0.0.1 255.255.255.252
+ ipv6 address 2001:ABCD:CAFE:1::1/64
+ ospfv3 123 ipv6 area 0
+ ospfv3 123 ipv4 area 0
+!
+interface Ethernet0/1
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 5,10,15,25
+ switchport mode trunk
+ channel-group 1 mode active
+!
+interface Ethernet0/2
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 5,10,15,25
+ switchport mode trunk
+ channel-group 1 mode active
+!
+interface Ethernet0/3
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!         
+interface Vlan5
+ description VLAN5
+ ip address 192.168.1.1 255.255.255.192
+ ipv6 address FE80::5 link-local
+ ospfv3 123 ipv4 area 0
+!
+interface Vlan10
+ ip address 192.168.1.65 255.255.255.192
+ ipv6 address FE80::10 link-local
+ ospfv3 123 ipv4 area 0
+!
+interface Vlan15
+ ip address 192.168.2.1 255.255.255.224
+ ipv6 address FE80::15 link-local
+ ospfv3 123 ipv4 area 0
+!
+interface Vlan25
+ ip address 192.167.2.33 255.255.255.224
+ ipv6 address FE80::25 link-local
+ ospfv3 123 ipv4 area 0
+!
+router ospfv3 123
+ !        
+ address-family ipv4 unicast
+  router-id 1.1.1.1
+ exit-address-family
+ !
+ address-family ipv6 unicast
+  router-id 1.1.1.1
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+ip http server
+ip http secure-server
+ip ssh bulk-mode 131072
+!
+no logging btrace
+!
+!
+!
+control-plane
+!
+!
+!         
+line con 0
+ exec-timeout 0 0
+ password cisco
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password cisco
+ login
+ transport input ssh
+!
+!
+end

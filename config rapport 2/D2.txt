@@ -1,0 +1,167 @@
+D2#show run
+Building configuration...
+
+Current configuration : 3985 bytes
+!
+! Last configuration change at 15:10:28 UTC Wed Oct 8 2025
+!
+version 17.15
+service timestamps debug datetime msec
+service timestamps log datetime msec
+!
+hostname D2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+!
+!
+!
+no ip routing
+!
+!
+!
+!         
+!
+!
+!
+!
+!
+!
+ip audit notify log
+ip audit po max-events 100
+no ip cef
+login on-success log
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+crypto pki trustpoint TP-self-signed-131184676
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-131184676
+ revocation-check none
+ rsakeypair TP-self-signed-131184676
+ hash sha512
+!
+!
+crypto pki certificate chain TP-self-signed-131184676
+ certificate self-signed 01
+  3082032E 30820216 A0030201 02020101 300D0609 2A864886 F70D0101 0D050030 
+  30312E30 2C060355 04030C25 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 31333131 38343637 36301E17 0D323531 30303630 38333830 
+  375A170D 33353130 30363038 33383037 5A303031 2E302C06 03550403 0C25494F 
+  532D5365 6C662D53 69676E65 642D4365 72746966 69636174 652D3133 31313834 
+  36373630 82012230 0D06092A 864886F7 0D010101 05000382 010F0030 82010A02 
+  82010100 ECF2A7AB AC38E6A3 F13B6767 7DF4854F BC61C7D8 22835A32 D501DF0C 
+  221F7634 87EEE1AC 9EF52AF5 CABA7715 A53F3467 6E2BBB7E D68C17D7 784E3D8A 
+  78B78717 8EC72281 85A22574 0021D0F9 6E725131 8B20F8A5 617F4DC9 9F2104A2 
+  FCB71C11 7A188730 225B3CB1 0F846E50 7DCAC537 1F066BB8 5B3FF7CF E1F39C37 
+  9DAC1CD7 582FE18D 3F7589CE 9C900D09 FE1A7300 622022C2 929EF659 E5660B1D 
+  8E24384C 4C34C151 DB98BD80 E702EA07 52FF12E5 6848654D A313976E 28118E1C 
+  9466F05C 205EFE3E E1B77AE5 4E44C812 7D14ADDE DA832DE1 9BE42A1A 196712B1 
+  8BF0A913 69D5D4EA D84A146B 378DB92E 6F870FF3 A5D17D65 DD99C82E 9C3D1E7C 
+  85363BCD 02030100 01A35330 51301D06 03551D0E 04160414 57C7C828 FC57183E 
+  0CCD9F52 DC66348B C5C4DB2D 301F0603 551D2304 18301680 1457C7C8 28FC5718 
+  3E0CCD9F 52DC6634 8BC5C4DB 2D300F06 03551D13 0101FF04 05300301 01FF300D 
+  06092A86 4886F70D 01010D05 00038201 0100BA40 5183A679 C53DF099 55F980DA 
+  1F717D96 199D7B23 271B1EAB A62B0908 503AEA3D 187018F0 3842F53A 7E529BA4 
+  CFA17002 7F306447 51702088 7939B80F AD9D3A7D 3B5ECFC7 69896D98 1A8D1CDE 
+  D67D74BB D7E669D0 E29C4EE7 21EE35AB 37D175BE 843D2FD2 FCB82E66 3C76C0FF 
+  FD836B3F 058FB05E FC403013 A463E3A6 67F42249 D8B53963 E5423367 934BBA18 
+  8C8F8565 93E19589 325521B0 1F68F8D4 5E4073CA 32220C6D C40A12C3 633605F8 
+  EB25CECD 7CC3202A F81E464E E7021498 DAB26A87 0DADCD28 76693716 03697E92 
+  2529A30E 122271A3 8CEB064D 7FF8F548 560E0616 19B2E58E 4DC2A133 A6285125 
+  EA068DFB BCC15387 43FFA35E ED17D9D6 CE45
+        quit
+!
+!
+memory free low-watermark processor 79593
+!
+!
+spanning-tree mode mst
+spanning-tree extend system-id
+!
+spanning-tree mst configuration
+ name REGION1
+ revision 2
+ instance 1 vlan 1-10
+ instance 2 vlan 11-20
+ instance 3 vlan 21-30
+!
+spanning-tree mst 2 priority 4096
+!
+username cisco password 0 cisco
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+interface Port-channel1
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 5,10,15,25
+ switchport mode trunk
+!
+interface Ethernet0/0
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 5,10,15,25
+ switchport mode trunk
+ channel-group 1 mode active
+!         
+interface Ethernet0/1
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 5,10,15,25
+ switchport mode trunk
+ channel-group 1 mode active
+!
+interface Ethernet0/2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/3
+ switchport access vlan 10
+ switchport mode access
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+!
+interface Vlan5
+ ip address 192.168.1.2 255.255.255.192
+ no ip route-cache
+!
+ip default-gateway 192.168.1.1
+ip forward-protocol nd
+!         
+!
+ip http server
+ip http secure-server
+ip ssh bulk-mode 131072
+!
+no logging btrace
+!
+!
+!
+control-plane
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+ password cisco
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password cisco
+ login
+ transport input ssh
+!
+!
+end
